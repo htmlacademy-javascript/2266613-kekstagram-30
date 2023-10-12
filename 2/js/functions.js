@@ -3,15 +3,15 @@
 Функция для проверки длины строки. Она принимает строку, которую нужно проверить, и максимальную длину и возвращает true, если строка меньше или равна указанной длине, и false, если строка длиннее. Эта функция нам пригодится для валидации формы. Примеры использования функции:
 */
 
-const getStringLength = (string, maxLength) => string.length <= maxLength;
+const isStringLengthValid = (string, maxLength) => maxLength >= string.length;
 
 // Cтрока короче 20 символов
-getStringLength('проверяемая строка', 20); // true
+isStringLengthValid('проверяемая строка', 20); // true
 // Длина строки ровно 18 символов
-getStringLength('проверяемая строка', 18); // true
+isStringLengthValid('проверяемая строка', 18); // true
 // Строка длиннее 10 символов
-getStringLength('проверяемая строка', 10); // false
-getStringLength('или какая-то другая строка', 30); // true
+isStringLengthValid('проверяемая строка', 10); // false
+isStringLengthValid('или какая-то другая строка', 30); // true
 
 /*
 2.
@@ -20,7 +20,7 @@ getStringLength('или какая-то другая строка', 30); // true
 Если хотите усложнить задание, предусмотрите случай, когда в строке встречаются пробелы. Они не должны учитываться при проверке!
 */
 
-function isPolindrom(string) {
+const isPolindrom = (string) => {
   let backwardString = '';
   string = string.replaceAll(' ', '');
 
@@ -29,7 +29,7 @@ function isPolindrom(string) {
   }
 
   return string.toLowerCase() === backwardString.toLowerCase();
-}
+};
 
 // Строка является палиндромом
 isPolindrom('топот'); // true
@@ -48,7 +48,7 @@ isPolindrom('Лёша на полке клопа нашёл '); // true
 Если хотите усложнить задание, предусмотрите случай, когда вместо строки приходит число. Обратите внимание, что возвращать функция по-прежнему должна только целые положительные числа:
 */
 
-function getAllNumbers(string) {
+const getAllNumbers = (string) => {
   let result = '';
 
   if (typeof string === 'number') {
@@ -56,7 +56,7 @@ function getAllNumbers(string) {
   }
 
   for (let i = 0; i < string.length; i++) {
-    if (!isNaN(parseInt(string[i], 10))) {
+    if (!isNaN(string[i])) {
       result += string[i];
     }
   }
@@ -66,8 +66,8 @@ function getAllNumbers(string) {
     return NaN;
   }
 
-  return result;
-}
+  return parseInt(result, 10);
+};
 
 getAllNumbers('2023 год'); // 2023
 getAllNumbers('ECMAScript 2022'); // 2022
