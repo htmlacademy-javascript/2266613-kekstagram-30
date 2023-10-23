@@ -70,13 +70,14 @@ const createRandomComment = () => ({
 
 const generateRandomPhotoDescriptionId = createRandomNumber(1, 25);
 const generateRandomPhotoDescriptionUrl = createRandomNumber(1, 25);
+const generateRandomCommentsCount = createRandomNumber(0, COMMENTS_COUNT);
 
 const createRandomPhotoDescription = () => ({
   id: generateRandomPhotoDescriptionId(),
   url: `photos/${generateRandomPhotoDescriptionUrl()}.jpg`,
   description: getRandomArrayElement(RANDOM_DESCRIPTION),
   likes: getRandomInteger(LIKE_MIN_COUNT, LIKE_MAX_COUNT),
-  comments: Array.from({length: COMMENTS_COUNT}, createRandomComment)
+  comments: Array.from({length: generateRandomCommentsCount()}, createRandomComment)
 });
 
 const photosDescription = () => Array.from({length: PHOTO_DESCRIPTION_COUNT}, createRandomPhotoDescription);
@@ -85,6 +86,8 @@ photosDescription();
 
 // eslint-disable-next-line no-console
 console.dir(photosDescription, { depth: null });
+
+// console.log(photosDescription());
 
 // если я правильно понял то как делали на лайве 4го раздела, то там создаеются числа по очереди для id, а у меня сделано, что случайные, но не повторяющиеся. не пойму, я вообще задание правильно сделал или неправильно его понял?
 
