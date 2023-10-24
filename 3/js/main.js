@@ -1,11 +1,11 @@
-const PHOTO_DESCRIPTION_COUNT = 25;
+const PHOTO_DESCRIPTION_COUNT = 10;
 
 const AVATAR_COUNT = 6;
 const LIKE_MIN_COUNT = 15;
 const LIKE_MAX_COUNT = 200;
 const COMMENTS_COUNT = 30;
 
-const RANDOM_DESCRIPTION = [
+const RANDOM_DESCRIPTIONS = [
   'Замечательный отдых на природе! #путешествие #природа #отдых',
   'Солнце, море и вечеринка! #пляж #море #вечеринка',
   'Путешествие в дикую природу. #приключения #отпуск #природа',
@@ -75,19 +75,19 @@ const generateRandomCommentsCount = createRandomNumber(0, COMMENTS_COUNT);
 const createRandomPhotoDescription = () => ({
   id: generateRandomPhotoDescriptionId(),
   url: `photos/${generateRandomPhotoDescriptionUrl()}.jpg`,
-  description: getRandomArrayElement(RANDOM_DESCRIPTION),
+  description: getRandomArrayElement(RANDOM_DESCRIPTIONS),
   likes: getRandomInteger(LIKE_MIN_COUNT, LIKE_MAX_COUNT),
   comments: Array.from({length: generateRandomCommentsCount()}, createRandomComment)
 });
 
-const photosDescription = () => Array.from({length: PHOTO_DESCRIPTION_COUNT}, createRandomPhotoDescription);
+const getPhotosDescription = () => Array.from({length: PHOTO_DESCRIPTION_COUNT}, createRandomPhotoDescription);
 
-photosDescription();
+getPhotosDescription();
 
 // eslint-disable-next-line no-console
-console.dir(photosDescription, { depth: null });
+console.dir(getPhotosDescription, { depth: null });
 
-// console.log(photosDescription());
+// console.log(getPhotosDescription());
 
 // если я правильно понял то как делали на лайве 4го раздела, то там создаеются числа по очереди для id, а у меня сделано, что случайные, но не повторяющиеся. не пойму, я вообще задание правильно сделал или неправильно его понял?
 
