@@ -14,6 +14,8 @@ const closeBigPictureModalElement = bigPictureModal.querySelector('.big-picture_
 const commentsList = document.querySelector('.social__comments');
 // Находим все элементы, содержащие комментарии
 const commentsElements = commentsList.children;
+// Находим элемент для загрузки дополнительных комментариев модального окна
+// const loaderCommentElement = bigPictureModal.querySelector('.comments-loader');
 
 const renderPicture = ({ url, description, likes }) => {
   bigPictureModal.querySelector('.big-picture__img img').src = url;
@@ -28,14 +30,16 @@ const showPicture = (pictureData) => {
   document.addEventListener('keydown', onDocumentKeydown);
 
   renderComments(pictureData.comments);
-  sortComments(commentsElements);
   renderPicture(pictureData);
+  sortComments(commentsElements);
 };
 
 const hidePicture = () => {
   bigPictureModal.classList.add('hidden');
   bodyElement.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
+
+  // loaderCommentElement.classList.remove('hidden');
 };
 
 const onCloseBigPictureModal = () => {
