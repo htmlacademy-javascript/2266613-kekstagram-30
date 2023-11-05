@@ -18,7 +18,7 @@ const totalCommentCountElement = bigPictureModal.querySelector('.social__comment
 // Находим элемент для загрузки дополнительных комментариев модального окна
 const loaderCommentElement = bigPictureModal.querySelector('.comments-loader');
 
-const initCommentList = ({ comments }) => {
+const initCommentList = (comments) => {
   commentCountElement.textContent = comments.length; // TODO исправить на то, сколько отображено комментариев
   totalCommentCountElement.textContent = comments.length; // показывает, сколько всего комментариев
   commentCountWrapper.classList.add('hidden'); // добавялем класс и прячем счетчик комментариев - временно
