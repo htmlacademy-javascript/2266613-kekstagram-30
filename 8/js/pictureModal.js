@@ -1,6 +1,6 @@
 import { isEscapeKey } from './util.js';
 import { renderComments } from './renderComments.js';
-import { sortComments } from './sortComments.js';
+import { lazyRenderComments } from './lazyRenderComments.js';
 
 // Находим тег body
 const bodyElement = document.querySelector('body');
@@ -9,6 +9,8 @@ const bodyElement = document.querySelector('body');
 const bigPictureModal = document.querySelector('.big-picture');
 // Находим кнопку закрытия модального окна
 const closeBigPictureModalElement = bigPictureModal.querySelector('.big-picture__cancel');
+
+const closeEvent = new Event('modal-close', { bubbles: true });
 
 // Находим элемент-контейнер, где будут находиться сгенерированные по шаблону комментарии
 const commentsList = document.querySelector('.social__comments');
@@ -31,15 +33,14 @@ const showPicture = (pictureData) => {
 
   renderComments(pictureData.comments);
   renderPicture(pictureData);
-  sortComments(commentsElements);
+  lazyRenderComments(commentsElements);
 };
 
 const hidePicture = () => {
   bigPictureModal.classList.add('hidden');
   bodyElement.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
-
-  // loaderCommentElement.classList.remove('hidden');
+  bigPictureModal.dispatchEvent(closeEvent);
 };
 
 const onCloseBigPictureModal = () => {
