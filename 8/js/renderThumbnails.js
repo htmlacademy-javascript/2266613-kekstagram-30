@@ -1,7 +1,7 @@
 // Находим шаблон миниатюры и в шаблоне находим нужный элемент
 const thumbnailTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
-// Функция создания (клонирования) миниатюры по шаблону
+// Функция создания (клонирования) одной миниатюры по шаблону
 const createThumbnail = ({id, url, description, comments, likes}) => {
   const thumbnail = thumbnailTemplate.cloneNode(true);
 
@@ -14,7 +14,7 @@ const createThumbnail = ({id, url, description, comments, likes}) => {
   return thumbnail;
 };
 
-// Функция содания фрагмента, наполнения фрагмента миниатюрами и добавления наполненного фрагмента в элемент-контейнер
+// Функция создания фрагмента, наполнения фрагмента миниатюрами и добавления наполненного фрагмента в элемент-контейнер
 const renderThumbnails = (pictures, container) => {
   const fragment = document.createDocumentFragment();
 
