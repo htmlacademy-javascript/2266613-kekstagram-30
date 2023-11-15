@@ -1,86 +1,89 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
 import { isEscapeKey } from './util.js';
 
-// Находим элемент-контейнер, где находится форма редактирования изображения
-const uploadContainer = document.querySelector('.img-upload');
-// Находим тег формы редактирования изображения
-const uploadFormElement = uploadContainer.querySelector('.img-upload__form');
+const MAX_HASHTAG_COUNT = 5;
+const VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
+const ErrorText = {
+  INVALID_COUNT: `Максимум ${MAX_HASHTAG_COUNT} хэштегов`,
+  NOT_UNIQUE: 'Хэштеги должны быть уникальными, они не могут повторяться',
+  INVALID_PATTERN: 'Неправильный хэштег, максимальная длина одного хэштега 20 символов, включая решётку, а так же хештег не может состоять только из одной решётки',
+};
+
+// Находим форму редактирования изображения
+const uploadFormElement = document.querySelector('.img-upload__form');
 // Находим поле для ввода хештегов формы редактирования изображения
-const uploadHashtagsField = uploadContainer.querySelector('.text__hashtags');
+const uploadHashtagsField = uploadFormElement.querySelector('.text__hashtags');
 // Находим поле для ввода комментария формы редактирования изображения
-const uploadCommentField = uploadContainer.querySelector('.text__description');
+const uploadCommentField = uploadFormElement.querySelector('.text__description');
 
+const pristine = new Pristine(
+  uploadFormElement,
+  {
+    classTo: 'img-upload__field-wrapper',
+    errorTextParent: 'img-upload__field-wrapper',
+    errorTextClass: 'img-upload__field-wrapper--error',
+  },
+  true
+);
 
-const pristine = new Pristine(uploadFormElement, {
-  classTo: 'img-upload__field-wrapper',
-  errorTextParent: 'img-upload__field-wrapper',
-  errorTextClass: 'img-upload__field-wrapper--error',
-});
+const isFormValid = (evt) => pristine.validate() ? pristine.reset() : evt.preventDefault();
 
-uploadFormElement.addEventListener('submit', (evt) => {
-  evt.preventDefault();
+const normalizeTags = (tagsString) => tagsString
+  .trim()
+  .replace(/\s+/g, ' ')
+  .split(' ');
 
-  const isValid = pristine.validate();
-  if (isValid) {
-    console.log('valid');
-  } else {
-    console.log('ne valid nifiga');
-  }
-});
-
-let hashtagResult = '';
-const regexp = /^#[a-zа-яё0-9]{1,19}$/i;
-
-function hashtagsValidate (value) {
-  const array = value.trim().replace(/\s+/g, ' ').split(' '); // trim(), чтобы ошибка не выскакивала после того как поставлен пробел после хеш-тега
-  console.log(array);
-
-  if (uploadHashtagsField.value === '') {
-    return true;
-  }
-
-  if (array.length > 5) {
-    hashtagResult = 'количество хеш-тегов не может быть больше 5'; // не могу понять как это лучше реализовать?
-    return false;
-  }
+const hasValidTags = (value) => {
+  const array = normalizeTags(value);
 
   for (let i = 0; i < array.length; i++) {
-    if (!regexp.test(array[i])) {
-      hashtagResult = 'максимальная длина одного хэш-тега 20 символов, включая решётку, а так же хеш-тег не может состоять только из одной решётки';
+    if (!VALID_SYMBOLS.test(array[i])) {
       return false;
     }
   }
 
+  return true;
+};
+
+const hasUniqueTags = (value) => {
+  const array = normalizeTags(value);
   const arrayClone = [];
+
   for (let i = 0; i < array.length; i++) {
     const arrayValue = array[i].toLowerCase();
     if (arrayClone.includes(arrayValue.toLowerCase())) {
-      hashtagResult = 'хэш-теги не могут повторяться';
       return false;
     }
     arrayClone.push(arrayValue);
   }
 
   return true;
-}
+};
+
+const hasValidCount = (value) => normalizeTags(value).length <= MAX_HASHTAG_COUNT;
 
 pristine.addValidator(
   uploadHashtagsField,
-  hashtagsValidate,
-  // '${hashtagResult}' // можно ли как-то это сделать рабочим вариантом подставления строки?
-  'количество хеш-тегов не может быть больше 5; хэш-теги не могут повторяться; максимальная длина одного хэш-тега 20 символов, включая решётку, а так же хеш-тег не может состоять только из одной решётки'
+  hasValidTags,
+  ErrorText.INVALID_PATTERN,
+  1,
+  true
+);
+pristine.addValidator(
+  uploadHashtagsField,
+  hasUniqueTags,
+  ErrorText.NOT_UNIQUE,
+  2,
+  true
+);
+pristine.addValidator(
+  uploadHashtagsField,
+  hasValidCount,
+  ErrorText.INVALID_COUNT,
+  3,
+  true
 );
 
-uploadHashtagsField.addEventListener('keydown', (evt) => {
-  if (isEscapeKey) {
-    evt.stopPropagation(); // Предотвращаем всплытие события
-  }
-});
-
-function commentValidate (value) {
-  return value.length <= 140;
-}
+const commentValidate = (value) => value.length <= 140;
 
 pristine.addValidator(
   uploadCommentField,
@@ -88,8 +91,13 @@ pristine.addValidator(
   'Максимальная длина 140 символов'
 );
 
-uploadCommentField.addEventListener('keydown', (evt) => {
+const isTextFieldFocused = (evt) => {
   if (isEscapeKey) {
     evt.stopPropagation(); // Предотвращаем всплытие события
   }
-});
+};
+
+uploadHashtagsField.addEventListener('keydown', isTextFieldFocused);
+uploadCommentField.addEventListener('keydown', isTextFieldFocused);
+
+export { pristine, isFormValid };
