@@ -1,16 +1,12 @@
-import { pristine, isFormValid } from './uploadValidation.js';
-import './uploadEdit.js'; // Модуль для редактирования изображения формы загрузки изображения
 import { isEscapeKey } from './util.js';
+import { pristine, isFormValid } from './validation.js';
+import { resetScale } from './scale.js';
+import { init as initEffect, reset as resetEffect } from './effects.js';
 
-// Находим тег body
 const bodyElement = document.querySelector('body');
-// Находим форму редактирования изображения
 const uploadFormElement = document.querySelector('.img-upload__form');
-// Находим элемент через который пользователь загружает изображение
 const uploadInputElement = uploadFormElement.querySelector('.img-upload__input');
-// Находим элемент отвечающий за скрытие формы редактирования изображения
 const uploadModalElement = uploadFormElement.querySelector('.img-upload__overlay');
-// Находим кнопку закрытия формы редактирования изображения
 const closeUploadFormElement = uploadFormElement.querySelector('.img-upload__cancel');
 
 const showModal = () => {
@@ -26,6 +22,8 @@ const hideModal = () => {
 
   uploadInputElement.form.reset();
   pristine.reset();
+  resetScale();
+  resetEffect();
 };
 
 const onUploadInputChange = () => {
@@ -50,3 +48,4 @@ const onUploadFormSubmit = (evt) => {
 uploadInputElement.addEventListener('change', onUploadInputChange);
 closeUploadFormElement.addEventListener('click', onCloseUploadFormClick);
 uploadFormElement.addEventListener('submit', onUploadFormSubmit);
+initEffect();
