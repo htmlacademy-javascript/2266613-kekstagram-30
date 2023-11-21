@@ -3,9 +3,9 @@ const REMOVE_MESSAGE_TIMEOUT = 5000;
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-const hideMessage = (message, typeResultMessage) => {
+const hideMessage = (message) => {
   message.remove();
-  document.body.removeEventListener('click', onBodyClick(typeResultMessage));
+  document.body.removeEventListener('click', onBodyClick);
   document.removeEventListener('keydown', onDocumentKeydown);
 };
 
@@ -41,7 +41,7 @@ const showMessage = (typeResultMessage) => {
   }
 
   const onCloseMessageElementClick = () => {
-    hideMessage(message, typeResultMessage);
+    hideMessage(message);
   };
 
   document.body.addEventListener('click', onBodyClick);
