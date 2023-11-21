@@ -4,23 +4,23 @@ const REMOVE_MESSAGE_TIMEOUT = 5000;
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const hideMessage = (message) => {
-  message.remove();
+  bodyElement.querySelector(`.${message}`).remove();
   document.body.removeEventListener('click', onBodyClick);
   document.removeEventListener('keydown', onDocumentKeydown);
 };
 
 function onBodyClick(evt, typeResultMessage) {
-  if (evt.target.closest(`.${typeResultMessage}`)) { // не могу исправить данную функцию, из-за нее ломается отображение сообщений, но не могу понять как это исправить(
+  if (evt.target.closest(`.${typeResultMessage}__inner`)) {
     return;
   }
 
-  hideMessage();
+  hideMessage(typeResultMessage);
 }
 
-function onDocumentKeydown(evt) {
+function onDocumentKeydown(evt, typeResultMessage) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    hideMessage();
+    hideMessage(typeResultMessage);
   }
 }
 
@@ -41,16 +41,14 @@ const showMessage = (typeResultMessage) => {
   }
 
   const onCloseMessageElementClick = () => {
-    hideMessage(message);
+    hideMessage(typeResultMessage);
   };
 
-  document.body.addEventListener('click', onBodyClick);
-  document.addEventListener('keydown', onDocumentKeydown);
+  document.body.addEventListener('click', (evt) => onBodyClick(evt, typeResultMessage));
+  document.addEventListener('keydown', (evt) => onDocumentKeydown(evt, typeResultMessage));
 
-  if (message.querySelector('button')) {
-    const closeMessageElement = document.querySelector(`.${typeResultMessage}__button`);
-    closeMessageElement.addEventListener('click', onCloseMessageElementClick(typeResultMessage));
-  }
+  const closeMessageElement = message.querySelector(`.${typeResultMessage}__button`);
+  closeMessageElement.addEventListener('click', onCloseMessageElementClick);
 };
 
 export { isEscapeKey, showMessage };
