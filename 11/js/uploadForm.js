@@ -1,4 +1,4 @@
-import { isEscapeKey } from './util.js';
+import { isEscapeKey, showMessage } from './util.js';
 import { pristine } from './validation.js';
 import { resetScale } from './scale.js';
 import { init as initEffect, reset as resetEffect } from './effects.js';
@@ -57,54 +57,28 @@ const onCloseUploadFormClick = () => {
   hideModal();
 };
 
-// Функция для создания элементов для вывода сообщений при успешных действиях пользователя или ошибках
-const showMessage = (typeResultMessage) => {
-  const template = document.querySelector(`#${typeResultMessage}`).content.querySelector(`.${typeResultMessage}`);
-  const messageClone = template.cloneNode(true);
-  bodyElement.append(messageClone);
-
-  const message = document.querySelector(`.${typeResultMessage}`);
-
-  if (typeResultMessage === 'data-error') {
-    setTimeout(() => {
-      message.remove();
-    },
-    5000);
-    return;
-  }
-
-  // document.addEventListener('keydown', onDocumentKeydown); не получается тут повесить обработчик такой, т.к. сообщение добавляется до того, как закроется форма (а во время закрытия она удаляет этот обработчик), хотя создание сообщения идет после then с успешным ответом
-
-  const hideMessage = () => {
-    message.remove();
-  };
-  const onCloseMessageElement = () => {
-    hideMessage();
-  };
-
-  if (message.querySelector('button')) {
-    const closeMessageElement = document.querySelector(`.${typeResultMessage}__button`);
-    closeMessageElement.addEventListener('click', onCloseMessageElement);
-  }
-};
-
 const setUploadFormSubmit = (onSuccess) => {
   uploadFormElement.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
+    blockUploadSubmitElement();
+
     const isValid = pristine.validate();
-    if (isValid) {
-      blockUploadSubmitElement(); // не работает блокировка кнопки почему-то
-      sendData(new FormData(evt.target))
-        .then(() => {
-          onSuccess();
-          showMessage(Message.success);
-        })
-        .catch(() => {
-          showMessage(Message.error);
-        })
-        .finally(unblockUploadSubmitElement()); // не работает
+    if (!isValid) {
+      unblockUploadSubmitElement();
+      return;
     }
+
+    sendData(new FormData(evt.target))
+      .then(() => {
+        onSuccess();
+        showMessage(Message.success);
+        unblockUploadSubmitElement();
+      })
+      .catch(() => {
+        showMessage(Message.error);
+        unblockUploadSubmitElement();
+      });
   });
 };
 
@@ -122,4 +96,4 @@ const initUploadForm = () => {
   setUploadFormSubmit(hideModal);
 };
 
-export { initUploadForm, showMessage, Message };
+export { initUploadForm, Message };

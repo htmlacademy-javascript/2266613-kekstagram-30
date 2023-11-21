@@ -1,37 +1,56 @@
-// Функция возврата случайного числа в заданном диапазоне (min и max)
-function getRandomInteger (min, max) {
-  const lower = Math.ceil(Math.min(Math.abs(min), Math.abs(max)));
-  const upper = Math.floor(Math.max(Math.abs(min), Math.abs(max)));
-  const result = Math.random() * (upper - lower + 1) + lower;
+const bodyElement = document.querySelector('body');
+const REMOVE_MESSAGE_TIMEOUT = 5000;
 
-  return Math.floor(result);
-}
-
-// Функция создает замыкание, которое позволяет генерировать случайные числа в заданном диапазоне (min и max) без повторений
-function createRandomNumber (min, max) {
-  const previousValues = [];
-
-  return function () {
-    let currentValue = getRandomInteger(min, max);
-
-    if (previousValues.length >= (max - min + 1)) {
-      return null;
-    }
-
-    while (previousValues.includes(currentValue)) {
-      currentValue = getRandomInteger(min, max);
-    }
-
-    previousValues.push(currentValue);
-
-    return currentValue;
-  };
-}
-
-// Функция проверки для проверки, является ли клавиша, переданная в событии evt, клавишей "Escape"
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-// Функция возвращающая случайный элемент переданного массива
-const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
+const hideMessage = (message, typeResultMessage) => {
+  message.remove();
+  document.body.removeEventListener('click', onBodyClick(typeResultMessage));
+  document.removeEventListener('keydown', onDocumentKeydown);
+};
 
-export { getRandomInteger, createRandomNumber, getRandomArrayElement, isEscapeKey };
+function onBodyClick(evt, typeResultMessage) {
+  if (evt.target.closest(`.${typeResultMessage}`)) { // не могу исправить данную функцию, из-за нее ломается отображение сообщений, но не могу понять как это исправить(
+    return;
+  }
+
+  hideMessage();
+}
+
+function onDocumentKeydown(evt) {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    hideMessage();
+  }
+}
+
+// Функция для создания элементов вывода сообщений при успешных действиях пользователя или ошибках
+const showMessage = (typeResultMessage) => {
+  const template = document.querySelector(`#${typeResultMessage}`).content.querySelector(`.${typeResultMessage}`);
+  const messageClone = template.cloneNode(true);
+  bodyElement.append(messageClone);
+
+  const message = document.querySelector(`.${typeResultMessage}`);
+
+  if (typeResultMessage === 'data-error') {
+    setTimeout(() => {
+      message.remove();
+    },
+    REMOVE_MESSAGE_TIMEOUT);
+    return;
+  }
+
+  const onCloseMessageElementClick = () => {
+    hideMessage(message, typeResultMessage);
+  };
+
+  document.body.addEventListener('click', onBodyClick);
+  document.addEventListener('keydown', onDocumentKeydown);
+
+  if (message.querySelector('button')) {
+    const closeMessageElement = document.querySelector(`.${typeResultMessage}__button`);
+    closeMessageElement.addEventListener('click', onCloseMessageElementClick(typeResultMessage));
+  }
+};
+
+export { isEscapeKey, showMessage };
