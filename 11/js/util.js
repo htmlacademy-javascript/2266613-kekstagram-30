@@ -1,5 +1,6 @@
 const bodyElement = document.querySelector('body');
 const REMOVE_MESSAGE_TIMEOUT = 5000;
+let currentTypeMessage = null;
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
@@ -9,23 +10,25 @@ const hideMessage = (message) => {
   document.removeEventListener('keydown', onDocumentKeydown);
 };
 
-function onBodyClick(evt, typeResultMessage) {
-  if (evt.target.closest(`.${typeResultMessage}__inner`)) {
+function onBodyClick(evt) {
+  if (evt.target.closest(`.${currentTypeMessage}__inner`)) {
     return;
   }
 
-  hideMessage(typeResultMessage);
+  hideMessage(currentTypeMessage);
 }
 
-function onDocumentKeydown(evt, typeResultMessage) {
+function onDocumentKeydown(evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    hideMessage(typeResultMessage);
+    hideMessage(currentTypeMessage);
   }
 }
 
 // Функция для создания элементов вывода сообщений при успешных действиях пользователя или ошибках
 const showMessage = (typeResultMessage) => {
+  currentTypeMessage = typeResultMessage;
+
   const template = document.querySelector(`#${typeResultMessage}`).content.querySelector(`.${typeResultMessage}`);
   const messageClone = template.cloneNode(true);
   bodyElement.append(messageClone);
@@ -44,8 +47,8 @@ const showMessage = (typeResultMessage) => {
     hideMessage(typeResultMessage);
   };
 
-  document.body.addEventListener('click', (evt) => onBodyClick(evt, typeResultMessage));
-  document.addEventListener('keydown', (evt) => onDocumentKeydown(evt, typeResultMessage));
+  document.body.addEventListener('click', onBodyClick);
+  document.addEventListener('keydown', onDocumentKeydown);
 
   const closeMessageElement = message.querySelector(`.${typeResultMessage}__button`);
   closeMessageElement.addEventListener('click', onCloseMessageElementClick);

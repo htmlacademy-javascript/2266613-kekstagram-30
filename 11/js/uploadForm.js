@@ -57,6 +57,20 @@ const onCloseUploadFormClick = () => {
   hideModal();
 };
 
+const validUploadForm = (evt, onSuccess) => {
+  sendData(new FormData(evt.target))
+    .then(() => {
+      onSuccess();
+      showMessage(Message.success);
+    })
+    .catch(() => {
+      showMessage(Message.error);
+    })
+    .finally(() => {
+      unblockUploadSubmitElement();
+    });
+};
+
 const setUploadFormSubmit = (onSuccess) => {
   uploadFormElement.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -64,21 +78,11 @@ const setUploadFormSubmit = (onSuccess) => {
     blockUploadSubmitElement();
 
     const isValid = pristine.validate();
-    if (!isValid) {
+    if (isValid) {
+      validUploadForm(evt, onSuccess);
+    } else {
       unblockUploadSubmitElement();
-      return;
     }
-
-    sendData(new FormData(evt.target))
-      .then(() => {
-        onSuccess();
-        showMessage(Message.success);
-        unblockUploadSubmitElement();
-      })
-      .catch(() => {
-        showMessage(Message.error);
-        unblockUploadSubmitElement();
-      });
   });
 };
 

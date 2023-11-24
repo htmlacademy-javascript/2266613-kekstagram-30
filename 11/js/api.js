@@ -17,7 +17,7 @@ const load = (route, message = null, method = Method.GET, body = null) =>
   fetch(`${BASE_URL}${route}`, {method, body})
     .then((response) => {
       if (!response.ok) {
-        throw new Error(`Произошла ошибка ${response.status}: ${response.statusText}`);
+        throw new Error();
       }
       return response.json();
     })
