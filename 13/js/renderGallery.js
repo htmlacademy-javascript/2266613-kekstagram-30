@@ -6,6 +6,10 @@ const thumbnailsContainer = document.querySelector('.pictures');
 
 // Создаем галерею по массиву (import { getPhotosData } from '../js/data';), помещаем галерею миниатюрами в элемент-контейнер, кри клике на миниатюру определяем ее id и сравниваем с id из массива.
 const renderGallery = (pictures) => {
+  if (pictures === undefined) {
+    return;
+  }
+
   renderThumbnails(pictures, thumbnailsContainer);
 
   thumbnailsContainer.addEventListener('click', (evt) => {

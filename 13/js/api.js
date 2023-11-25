@@ -21,12 +21,12 @@ const load = (route, message = null, method = Method.GET, body = null) =>
       }
       return response.json();
     })
-    .catch((err) => {
-      throw new Error(showMessage(message) ?? err.message);
+    .catch(() => {
+      showMessage(message);
     });
 
 const getData = () => load(Route.GET_DATA, Message.dataError);
 
-const sendData = (body) => load(Route.POST_DATA, null, Method.POST, body); // если не передаю сюда null, то параметры передаются неправильно, не могу понять как это исправить...
+const sendData = (body) => load(Route.POST_DATA, null, Method.POST, body);
 
 export { getData, sendData };
