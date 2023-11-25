@@ -6,6 +6,7 @@ import { sendData } from './api.js';
 import { initFileChooser } from './avatar.js';
 
 const bodyElement = document.querySelector('body');
+const uploadPreview = document.querySelector('.img-upload__preview img');
 const uploadFormElement = document.querySelector('.img-upload__form');
 const uploadInputElement = uploadFormElement.querySelector('.img-upload__input');
 const uploadModalElement = uploadFormElement.querySelector('.img-upload__overlay');
@@ -48,6 +49,7 @@ const hideModal = () => {
   pristine.reset();
   resetScale();
   resetEffect();
+  URL.revokeObjectUrl(uploadPreview.src);
 };
 
 const onUploadInputChange = () => {
