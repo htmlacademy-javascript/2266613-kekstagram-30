@@ -9,8 +9,8 @@ const errorText = {
 };
 
 const uploadFormElement = document.querySelector('.img-upload__form');
-const uploadHashtagsField = uploadFormElement.querySelector('.text__hashtags');
-const uploadCommentField = uploadFormElement.querySelector('.text__description');
+const uploadHashtagsFieldElement = uploadFormElement.querySelector('.text__hashtags');
+const uploadCommentFieldElement = uploadFormElement.querySelector('.text__description');
 
 const pristine = new Pristine(
   uploadFormElement,
@@ -58,21 +58,21 @@ const hasUniqueTags = (value) => {
 const hasValidCount = (value) => normalizeTags(value).length <= MAX_HASHTAG_COUNT;
 
 pristine.addValidator(
-  uploadHashtagsField,
+  uploadHashtagsFieldElement,
   hasValidTags,
   errorText.INVALID_PATTERN,
   3,
   true
 );
 pristine.addValidator(
-  uploadHashtagsField,
+  uploadHashtagsFieldElement,
   hasUniqueTags,
   errorText.NOT_UNIQUE,
   2,
   true
 );
 pristine.addValidator(
-  uploadHashtagsField,
+  uploadHashtagsFieldElement,
   hasValidCount,
   errorText.INVALID_COUNT,
   1,
@@ -82,7 +82,7 @@ pristine.addValidator(
 const commentValidate = (value) => value.length <= 140;
 
 pristine.addValidator(
-  uploadCommentField,
+  uploadCommentFieldElement,
   commentValidate,
   'Максимальная длина 140 символов'
 );
@@ -93,7 +93,7 @@ const isTextFieldFocused = (evt) => {
   }
 };
 
-uploadHashtagsField.addEventListener('keydown', isTextFieldFocused);
-uploadCommentField.addEventListener('keydown', isTextFieldFocused);
+uploadHashtagsFieldElement.addEventListener('keydown', isTextFieldFocused);
+uploadCommentFieldElement.addEventListener('keydown', isTextFieldFocused);
 
 export { pristine };

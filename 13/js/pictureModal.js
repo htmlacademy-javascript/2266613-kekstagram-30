@@ -4,18 +4,18 @@ import { isEscapeKey } from './util.js';
 const bodyElement = document.querySelector('body');
 
 // Находим модальное окно, элемент куда будем добавлять данные
-const bigPictureModal = document.querySelector('.big-picture');
+const bigPictureModalBlock = document.querySelector('.big-picture');
 // Находим элемент-кнопку закрытия модального окна
-const closeBigPictureModalElement = bigPictureModal.querySelector('.big-picture__cancel');
+const closeBigPictureModalElement = bigPictureModalBlock.querySelector('.big-picture__cancel');
 
 // Находим элемент-контейнер, куда будем добавлять сгенерированные по шаблону комментарии
 const commentsList = document.querySelector('.social__comments');
 // Находим количество отображаемых комментариев модального окна
-const commentCountElement = bigPictureModal.querySelector('.social__comment-shown-count');
+const commentCountElement = bigPictureModalBlock.querySelector('.social__comment-shown-count');
 // Находим общее количество комментариев модального окна
-const totalCommentCountElement = bigPictureModal.querySelector('.social__comment-total-count');
+const totalCommentCountElement = bigPictureModalBlock.querySelector('.social__comment-total-count');
 // Находим элемент-кнопку для загрузки дополнительных комментариев модального окна
-const loaderCommentsElement = bigPictureModal.querySelector('.comments-loader');
+const loaderCommentsElement = bigPictureModalBlock.querySelector('.comments-loader');
 
 const COMMENTS_COUNT_SHOW = 5;
 let commentsCountShown = 0;
@@ -65,7 +65,7 @@ const onCommentsLoaderClick = () => {
 
 const hidePicture = () => {
   commentsCountShown = 0;
-  bigPictureModal.classList.add('hidden');
+  bigPictureModalBlock.classList.add('hidden');
   bodyElement.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
 };
@@ -82,14 +82,14 @@ function onDocumentKeydown(evt) {
 }
 
 const renderPicture = ({ url, description, likes }) => {
-  bigPictureModal.querySelector('.big-picture__img img').src = url;
-  bigPictureModal.querySelector('.big-picture__img img').alt = description;
-  bigPictureModal.querySelector('.likes-count').textContent = likes;
-  bigPictureModal.querySelector('.social__caption').textContent = description;
+  bigPictureModalBlock.querySelector('.big-picture__img img').src = url;
+  bigPictureModalBlock.querySelector('.big-picture__img img').alt = description;
+  bigPictureModalBlock.querySelector('.likes-count').textContent = likes;
+  bigPictureModalBlock.querySelector('.social__caption').textContent = description;
 };
 
 const showPicture = (pictureData) => {
-  bigPictureModal.classList.remove('hidden');
+  bigPictureModalBlock.classList.remove('hidden');
   bodyElement.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
 

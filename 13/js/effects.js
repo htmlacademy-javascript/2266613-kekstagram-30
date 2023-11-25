@@ -64,11 +64,11 @@ const effectToSliderOptions = {
 };
 
 const uploadContainer = document.querySelector('.img-upload');
-const uploadPreview = uploadContainer.querySelector('.img-upload__preview img');
+const uploadPreviewElement = uploadContainer.querySelector('.img-upload__preview img');
 const uploadSliderContainer = uploadContainer.querySelector('.img-upload__effect-level');
-const uploadSliderInput = uploadContainer.querySelector('.effect-level__value');
-const uploadSlider = uploadContainer.querySelector('.effect-level__slider');
-const effectsElement = uploadContainer.querySelector('.effects');
+const uploadSliderInputElement = uploadContainer.querySelector('.effect-level__value');
+const uploadSliderElement = uploadContainer.querySelector('.effect-level__slider');
+const effectsBlock = uploadContainer.querySelector('.effects');
 
 let chosenEffect = Effects.DEFAULT;
 
@@ -76,13 +76,13 @@ const isDefault = () => chosenEffect === Effects.DEFAULT;
 
 const setPreviewStyle = () => {
   if (isDefault()) {
-    uploadPreview.style.filter = null;
+    uploadPreviewElement.style.filter = null;
     return;
   }
 
-  const { value } = uploadSliderInput;
+  const { value } = uploadSliderInputElement;
   const { style, unit } = effectToFilter[chosenEffect];
-  uploadPreview.style.filter = `${style}(${value}${unit})`;
+  uploadPreviewElement.style.filter = `${style}(${value}${unit})`;
 };
 
 const showSlider = () => {
@@ -94,12 +94,12 @@ const hideSlider = () => {
 };
 
 const onSliderUpdate = () => {
-  uploadSliderInput.value = uploadSlider.noUiSlider.get();
+  uploadSliderInputElement.value = uploadSliderElement.noUiSlider.get();
   setPreviewStyle();
 };
 
 const createSlider = ({ min, max, step }) => {
-  noUiSlider.create(uploadSlider, {
+  noUiSlider.create(uploadSliderElement, {
     range: { min, max },
     start: max,
     step,
@@ -117,12 +117,12 @@ const createSlider = ({ min, max, step }) => {
     },
   });
 
-  uploadSlider.noUiSlider.on('update', onSliderUpdate);
+  uploadSliderElement.noUiSlider.on('update', onSliderUpdate);
   hideSlider();
 };
 
 const updateSlider = ({ min, max, step }) => {
-  uploadSlider.noUiSlider.updateOptions({
+  uploadSliderElement.noUiSlider.updateOptions({
     range: { min, max },
     step,
     start: max,
@@ -154,7 +154,7 @@ const onEffectsChange = (evt) => {
 
 const init = () => {
   createSlider(effectToSliderOptions[chosenEffect]);
-  effectsElement.addEventListener('change', onEffectsChange);
+  effectsBlock.addEventListener('change', onEffectsChange);
 };
 
 export { init, reset };

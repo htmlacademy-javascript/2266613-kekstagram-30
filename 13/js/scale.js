@@ -4,13 +4,13 @@ const MAX_SCALE = 100;
 const DEFAULT_SCALE = 100;
 
 const uploadContainer = document.querySelector('.img-upload');
-const uploadPreview = uploadContainer.querySelector('.img-upload__preview img');
+const uploadPreviewElement = uploadContainer.querySelector('.img-upload__preview img');
 const scaleControlSmallerElement = uploadContainer.querySelector('.scale__control--smaller');
 const scaleControlBiggerElement = uploadContainer.querySelector('.scale__control--bigger');
 const scaleValueElement = uploadContainer.querySelector('.scale__control--value');
 
 const scaleImage = (value) => {
-  uploadPreview.style.transform = `scale(${value / 100})`;
+  uploadPreviewElement.style.transform = `scale(${value / 100})`;
   scaleValueElement.value = `${value}%`;
 };
 
