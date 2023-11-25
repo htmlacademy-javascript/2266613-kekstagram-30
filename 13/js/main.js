@@ -3,13 +3,12 @@ import { renderGallery } from './renderGallery.js'; // Функция для с�
 import { filterButtons } from './sort.js';
 import { initUploadForm } from './uploadForm.js'; // Модуль для работы формы загрузки изображения
 
-import './sort.js';
 
 const bootstrap = async () => {
+  initUploadForm();
   const pictures = await getData();
   renderGallery(pictures);
   filterButtons(pictures);
-  initUploadForm();
 };
 
 bootstrap();

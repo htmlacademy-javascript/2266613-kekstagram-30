@@ -49,7 +49,7 @@ const hideModal = () => {
   pristine.reset();
   resetScale();
   resetEffect();
-  URL.revokeObjectUrl(uploadPreview.src);
+  URL.revokeObjectURL(uploadPreview.src);
 };
 
 const onUploadInputChange = () => {
@@ -67,6 +67,7 @@ const validUploadForm = (evt, onSuccess) => {
       showMessage(Message.success);
     })
     .catch(() => {
+      document.removeEventListener('keydown', onDocumentKeydown);
       showMessage(Message.error);
     })
     .finally(() => {
