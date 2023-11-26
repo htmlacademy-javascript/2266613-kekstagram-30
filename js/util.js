@@ -13,27 +13,6 @@ function getRandomInteger (min, max) {
   return Math.floor(result);
 }
 
-// Функция создает замыкание, которое позволяет генерировать случайные числа в заданном диапазоне (min и max) без повторений
-function createRandomNumber (min, max) {
-  const previousValues = [];
-
-  return function () {
-    let currentValue = getRandomInteger(min, max);
-
-    if (previousValues.length >= (max - min + 1)) {
-      return null;
-    }
-
-    while (previousValues.includes(currentValue)) {
-      currentValue = getRandomInteger(min, max);
-    }
-
-    previousValues.push(currentValue);
-
-    return currentValue;
-  };
-}
-
 // Функция возвращающая случайный элемент переданного массива
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
@@ -97,4 +76,4 @@ const debounce = (callback, timeoutDelay) => {
   };
 };
 
-export { createRandomNumber, getRandomArrayElement, isEscapeKey, showMessage, debounce };
+export { getRandomArrayElement, isEscapeKey, showMessage, debounce };
