@@ -14,9 +14,9 @@ const closeUploadFormElement = uploadFormElement.querySelector('.img-upload__can
 const uploadSubmitElement = document.querySelector('.img-upload__submit');
 
 const Message = {
-  success: 'success',
-  error: 'error',
-  dataError: 'data-error',
+  SUCCESS: 'success',
+  ERROR: 'error',
+  DATA_ERROR: 'data-error',
 };
 
 const SubmitButtonText = {
@@ -64,11 +64,11 @@ const validUploadForm = (evt, onSuccess) => {
   sendData(new FormData(evt.target))
     .then(() => {
       onSuccess();
-      showMessage(Message.success);
+      showMessage(Message.SUCCESS);
     })
     .catch(() => {
       document.removeEventListener('keydown', onDocumentKeydown);
-      showMessage(Message.error);
+      showMessage(Message.ERROR);
     })
     .finally(() => {
       unblockUploadSubmitElement();
