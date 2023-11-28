@@ -29,27 +29,21 @@ const hasValidTags = (value) => {
     return true;
   }
 
-  const array = normalizeTags(value);
+  const values = normalizeTags(value);
 
-  for (let i = 0; i < array.length; i++) {
-    if (!VALID_SYMBOLS.test(array[i])) {
-      return false;
-    }
+  if (values.some((item) => !VALID_SYMBOLS.test(item))) {
+    return false;
   }
 
   return true;
 };
 
 const hasUniqueTags = (value) => {
-  const array = normalizeTags(value);
-  const arrayClone = [];
+  const values = normalizeTags(value);
 
-  for (let i = 0; i < array.length; i++) {
-    const arrayValue = array[i].toLowerCase();
-    if (arrayClone.includes(arrayValue)) {
-      return false;
-    }
-    arrayClone.push(arrayValue);
+  const cloneValues = values.map((item) => item.toLowerCase());
+  if (new Set(cloneValues).size !== cloneValues.length) {
+    return false;
   }
 
   return true;
@@ -87,13 +81,13 @@ pristine.addValidator(
   'Максимальная длина 140 символов'
 );
 
-const isTextFieldFocused = (evt) => {
+const onUploadFormTextFieldElementKeydown = (evt) => {
   if (isEscapeKey) {
     evt.stopPropagation();
   }
 };
 
-uploadHashtagsFieldElement.addEventListener('keydown', isTextFieldFocused);
-uploadCommentFieldElement.addEventListener('keydown', isTextFieldFocused);
+uploadHashtagsFieldElement.addEventListener('keydown', onUploadFormTextFieldElementKeydown);
+uploadCommentFieldElement.addEventListener('keydown', onUploadFormTextFieldElementKeydown);
 
 export { pristine };

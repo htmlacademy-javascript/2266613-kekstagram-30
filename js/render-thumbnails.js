@@ -17,6 +17,11 @@ const createThumbnail = ({id, url, description, comments, likes}) => {
 
 // Функция создания фрагмента, наполнения фрагмента миниатюрами и добавления наполненного фрагмента в элемент-контейнер
 const renderThumbnails = (pictures, container) => {
+  const thumbnailsToRemove = document.querySelectorAll('.picture');
+  thumbnailsToRemove.forEach((thumbnail) => {
+    thumbnail.remove();
+  });
+
   const fragment = document.createDocumentFragment();
 
   pictures.forEach((picture) => {

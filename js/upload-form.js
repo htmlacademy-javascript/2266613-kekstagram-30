@@ -52,15 +52,15 @@ const hideModal = () => {
   URL.revokeObjectURL(uploadPreviewElement.src);
 };
 
-const onUploadInputChange = () => {
+const onUploadInputElementChange = () => {
   showModal();
 };
 
-const onCloseUploadFormClick = () => {
+const onCloseUploadFormElementClick = () => {
   hideModal();
 };
 
-const validUploadForm = (evt, onSuccess) => {
+const checkValidUploadForm = (evt, onSuccess) => {
   sendData(new FormData(evt.target))
     .then(() => {
       onSuccess();
@@ -83,7 +83,7 @@ const setUploadFormSubmit = (onSuccess) => {
 
     const isValid = pristine.validate();
     if (isValid) {
-      validUploadForm(evt, onSuccess);
+      checkValidUploadForm(evt, onSuccess);
     } else {
       unblockUploadSubmitElement();
     }
@@ -98,11 +98,11 @@ function onDocumentKeydown(evt) {
 }
 
 const initUploadForm = () => {
-  uploadInputElement.addEventListener('change', onUploadInputChange);
-  closeUploadFormElement.addEventListener('click', onCloseUploadFormClick);
+  uploadInputElement.addEventListener('change', onUploadInputElementChange);
+  closeUploadFormElement.addEventListener('click', onCloseUploadFormElementClick);
   initFileChooser();
   initEffect();
   setUploadFormSubmit(hideModal);
 };
 
-export { initUploadForm, Message };
+export { initUploadForm, Message, showModal };

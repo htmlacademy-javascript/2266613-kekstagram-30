@@ -94,7 +94,7 @@ const hideSlider = () => {
 };
 
 const onSliderUpdate = () => {
-  uploadSliderInputElement.value = uploadSliderElement.noUiSlider.get();
+  uploadSliderInputElement.value = uploadSliderElement.noUiSlider.get(true);
   setPreviewStyle();
 };
 
@@ -105,15 +105,8 @@ const createSlider = ({ min, max, step }) => {
     step,
     connect: 'lower',
     format: {
-      to: function (value) {
-        if (Number.isInteger(value)) {
-          return value;
-        }
-        return value.toFixed(1);
-      },
-      from: function (value) {
-        return parseFloat(value);
-      },
+      to: (value) => Number.isInteger(value) ? value.toFixed(0) : value.toFixed(1),
+      from: (value) => parseFloat(value)
     },
   });
 
@@ -148,13 +141,13 @@ const reset = () => {
   setEffect(Effects.DEFAULT);
 };
 
-const onEffectsChange = (evt) => {
+const onEffectsBlockChange = (evt) => {
   setEffect(evt.target.value);
 };
 
 const init = () => {
   createSlider(effectToSliderOptions[chosenEffect]);
-  effectsBlock.addEventListener('change', onEffectsChange);
+  effectsBlock.addEventListener('change', onEffectsBlockChange);
 };
 
 export { init, reset };

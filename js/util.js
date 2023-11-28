@@ -1,3 +1,5 @@
+import { showModal } from './upload-form.js';
+
 const bodyElement = document.querySelector('body');
 
 const REMOVE_MESSAGE_TIMEOUT = 5000;
@@ -22,6 +24,9 @@ const hideMessage = (message) => {
   bodyElement.querySelector(`.${message}`).remove();
   document.body.removeEventListener('click', onBodyClick);
   document.removeEventListener('keydown', onDocumentKeydown);
+  if (message === 'error') {
+    showModal();
+  }
 };
 
 function onBodyClick(evt) {

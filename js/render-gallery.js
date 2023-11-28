@@ -1,5 +1,5 @@
-import { renderThumbnails } from './renderThumbnails.js';
-import { showPicture } from './pictureModal.js';
+import { renderThumbnails } from './render-thumbnails.js';
+import { showPicture } from './picture-modal.js';
 
 // Находим элемент-контейнер, куда будем добавлять сгенерированные по шаблону миниатюры
 const thumbnailsContainer = document.querySelector('.pictures');

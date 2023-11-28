@@ -1,5 +1,5 @@
 import { getRandomArrayElement, debounce } from './util.js';
-import { createThumbnail } from './renderThumbnails.js';
+import { renderThumbnails } from './render-thumbnails.js';
 
 const RERENDER_DELAY = 500;
 const RANDOM_FILTER_COUNT = 10;
@@ -14,72 +14,51 @@ const discussedFilterElement = filtersContainer.querySelector('#filter-discussed
 let currentFilterElement = defaultFilterElement;
 
 const getUniqueRandomArray = (pictures, count) => {
-  const uniqueArray = [];
+  const uniqueArrayElements = [];
 
-  while (uniqueArray.length < count) {
+  while (uniqueArrayElements.length < count) {
     const randomElement = getRandomArrayElement(pictures);
-    if (!uniqueArray.includes(randomElement)) {
-      uniqueArray.push(randomElement);
+    if (!uniqueArrayElements.includes(randomElement)) {
+      uniqueArrayElements.push(randomElement);
     }
   }
-  return uniqueArray;
+  return uniqueArrayElements;
 };
 
-const sortThumbnails = (evt, pictures) => {
-  const thumbnailsToRemove = thumbnailsContainer.querySelectorAll('.picture');
-  thumbnailsToRemove.forEach((thumbnail) => {
-    thumbnail.remove();
-  });
-
-  const fragment = document.createDocumentFragment();
-
+const sortThumbnails = (pictures) => {
   if (currentFilterElement === randomFilterElement) {
-    const randomArray = getUniqueRandomArray(pictures, RANDOM_FILTER_COUNT);
-
-    randomArray
-      .forEach((picture) => {
-        const thumbnail = createThumbnail(picture);
-        fragment.append(thumbnail);
-      });
-    thumbnailsContainer.append(fragment);
+    const randomArrayElements = getUniqueRandomArray(pictures, RANDOM_FILTER_COUNT);
+    renderThumbnails(randomArrayElements, thumbnailsContainer);
     return;
   }
 
   if (currentFilterElement === discussedFilterElement) {
-    const discussedArray = pictures.slice().sort((a, b) => b.comments.length - a.comments.length);
-
-    discussedArray
-      .forEach((picture) => {
-        const thumbnail = createThumbnail(picture);
-        fragment.append(thumbnail);
-      });
-    thumbnailsContainer.append(fragment);
+    const discussionArrayElements = pictures.slice().sort((a, b) => b.comments.length - a.comments.length);
+    renderThumbnails(discussionArrayElements, thumbnailsContainer);
     return;
   }
 
   if (currentFilterElement === defaultFilterElement) {
-    pictures.forEach((picture) => {
-      const thumbnail = createThumbnail(picture);
-      fragment.append(thumbnail);
-    });
+    renderThumbnails(pictures, thumbnailsContainer);
   }
-
-  thumbnailsContainer.append(fragment);
 };
 
-const onFilterElementClick = (evt, pictures) => {
+const changeFilterElementState = (evt) => {
   currentFilterElement.classList.remove('img-filters__button--active');
   currentFilterElement = evt.target;
   currentFilterElement.classList.add('img-filters__button--active');
-
-  const debouncedSortThumbnails = debounce(() => sortThumbnails(evt, pictures), RERENDER_DELAY);
-  debouncedSortThumbnails(evt, pictures); // Вызов отложенной функции после создания
 };
 
-const filterButtons = (pictures) => {
-  defaultFilterElement.addEventListener('click', (evt) => onFilterElementClick(evt, pictures));
-  randomFilterElement.addEventListener('click', (evt) => onFilterElementClick(evt, pictures));
-  discussedFilterElement.addEventListener('click', (evt) => onFilterElementClick(evt, pictures));
+const pressFilterButtons = (pictures) => {
+  const debouncedSortThumbnails = debounce(() => sortThumbnails(pictures), RERENDER_DELAY);
+  const filterElementClickHandler = (evt) => {
+    changeFilterElementState(evt, pictures);
+    debouncedSortThumbnails();
+  };
+
+  defaultFilterElement.addEventListener('click', filterElementClickHandler);
+  randomFilterElement.addEventListener('click', filterElementClickHandler);
+  discussedFilterElement.addEventListener('click', filterElementClickHandler);
 };
 
-export { filterButtons };
+export { pressFilterButtons };

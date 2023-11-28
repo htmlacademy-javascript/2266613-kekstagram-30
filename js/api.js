@@ -1,5 +1,5 @@
 import { showMessage } from './util.js';
-import { Message } from './uploadForm.js';
+import { Message } from './upload-form.js';
 
 const BASE_URL = 'https://30.javascript.pages.academy/kekstagram';
 

@@ -59,7 +59,7 @@ const renderComments = () => {
   totalCommentCountElement.textContent = comments.length;
 };
 
-const onCommentsLoaderClick = () => {
+const onCommentsLoaderElementClick = () => {
   renderComments();
 };
 
@@ -70,7 +70,7 @@ const hidePicture = () => {
   document.removeEventListener('keydown', onDocumentKeydown);
 };
 
-const onCloseBigPictureModal = () => {
+const onCloseBigPictureModalElementClick = () => {
   hidePicture();
 };
 
@@ -105,7 +105,7 @@ const showPicture = (pictureData) => {
   renderPicture(pictureData);
 };
 
-closeBigPictureModalElement.addEventListener('click', onCloseBigPictureModal);
-loaderCommentsElement.addEventListener('click', onCommentsLoaderClick);
+closeBigPictureModalElement.addEventListener('click', onCloseBigPictureModalElementClick);
+loaderCommentsElement.addEventListener('click', onCommentsLoaderElementClick);
 
 export { showPicture };
