@@ -6,7 +6,7 @@ const bodyElement = document.querySelector('body');
 // Находим модальное окно, элемент куда будем добавлять данные
 const bigPictureModalBlock = document.querySelector('.big-picture');
 // Находим элемент-кнопку закрытия модального окна
-const closeBigPictureModalElement = bigPictureModalBlock.querySelector('.big-picture__cancel');
+const bigPictureModalCloseElement = bigPictureModalBlock.querySelector('.big-picture__cancel');
 
 // Находим элемент-контейнер, куда будем добавлять сгенерированные по шаблону комментарии
 const commentsList = document.querySelector('.social__comments');
@@ -70,7 +70,7 @@ const hidePicture = () => {
   document.removeEventListener('keydown', onDocumentKeydown);
 };
 
-const onCloseBigPictureModalElementClick = () => {
+const onBigPictureModalCloseElementClick = () => {
   hidePicture();
 };
 
@@ -105,7 +105,7 @@ const showPicture = (pictureData) => {
   renderPicture(pictureData);
 };
 
-closeBigPictureModalElement.addEventListener('click', onCloseBigPictureModalElementClick);
+bigPictureModalCloseElement.addEventListener('click', onBigPictureModalCloseElementClick);
 loaderCommentsElement.addEventListener('click', onCommentsLoaderElementClick);
 
 export { showPicture };

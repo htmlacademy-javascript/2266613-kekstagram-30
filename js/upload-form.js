@@ -10,7 +10,7 @@ const uploadPreviewElement = document.querySelector('.img-upload__preview img');
 const uploadFormElement = document.querySelector('.img-upload__form');
 const uploadInputElement = uploadFormElement.querySelector('.img-upload__input');
 const uploadModalElement = uploadFormElement.querySelector('.img-upload__overlay');
-const closeUploadFormElement = uploadFormElement.querySelector('.img-upload__cancel');
+const uploadFormCloseElement = uploadFormElement.querySelector('.img-upload__cancel');
 const uploadSubmitElement = document.querySelector('.img-upload__submit');
 
 const Message = {
@@ -56,11 +56,11 @@ const onUploadInputElementChange = () => {
   showModal();
 };
 
-const onCloseUploadFormElementClick = () => {
+const onUploadFormCloseElementClick = () => {
   hideModal();
 };
 
-const checkValidUploadForm = (evt, onSuccess) => {
+const sendValidData = (evt, onSuccess) => {
   sendData(new FormData(evt.target))
     .then(() => {
       onSuccess();
@@ -83,7 +83,7 @@ const setUploadFormSubmit = (onSuccess) => {
 
     const isValid = pristine.validate();
     if (isValid) {
-      checkValidUploadForm(evt, onSuccess);
+      sendValidData(evt, onSuccess);
     } else {
       unblockUploadSubmitElement();
     }
@@ -99,7 +99,7 @@ function onDocumentKeydown(evt) {
 
 const initUploadForm = () => {
   uploadInputElement.addEventListener('change', onUploadInputElementChange);
-  closeUploadFormElement.addEventListener('click', onCloseUploadFormElementClick);
+  uploadFormCloseElement.addEventListener('click', onUploadFormCloseElementClick);
   initFileChooser();
   initEffect();
   setUploadFormSubmit(hideModal);

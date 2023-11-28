@@ -16,7 +16,7 @@ function getRandomInteger (min, max) {
 }
 
 // Функция возвращающая случайный элемент переданного массива
-const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
+const getRandomElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
@@ -81,4 +81,4 @@ const debounce = (callback, timeoutDelay) => {
   };
 };
 
-export { getRandomArrayElement, isEscapeKey, showMessage, debounce };
+export { getRandomElement, isEscapeKey, showMessage, debounce };

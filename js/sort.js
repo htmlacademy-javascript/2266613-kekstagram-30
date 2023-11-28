@@ -1,4 +1,4 @@
-import { getRandomArrayElement, debounce } from './util.js';
+import { getRandomElement, debounce } from './util.js';
 import { renderThumbnails } from './render-thumbnails.js';
 
 const RERENDER_DELAY = 500;
@@ -13,28 +13,28 @@ const discussedFilterElement = filtersContainer.querySelector('#filter-discussed
 
 let currentFilterElement = defaultFilterElement;
 
-const getUniqueRandomArray = (pictures, count) => {
-  const uniqueArrayElements = [];
+const getUniqueRandomElements = (pictures, count) => {
+  const uniqueElements = [];
 
-  while (uniqueArrayElements.length < count) {
-    const randomElement = getRandomArrayElement(pictures);
-    if (!uniqueArrayElements.includes(randomElement)) {
-      uniqueArrayElements.push(randomElement);
+  while (uniqueElements.length < count) {
+    const randomElement = getRandomElement(pictures);
+    if (!uniqueElements.includes(randomElement)) {
+      uniqueElements.push(randomElement);
     }
   }
-  return uniqueArrayElements;
+  return uniqueElements;
 };
 
 const sortThumbnails = (pictures) => {
   if (currentFilterElement === randomFilterElement) {
-    const randomArrayElements = getUniqueRandomArray(pictures, RANDOM_FILTER_COUNT);
-    renderThumbnails(randomArrayElements, thumbnailsContainer);
+    const randomElements = getUniqueRandomElements(pictures, RANDOM_FILTER_COUNT);
+    renderThumbnails(randomElements, thumbnailsContainer);
     return;
   }
 
   if (currentFilterElement === discussedFilterElement) {
-    const discussionArrayElements = pictures.slice().sort((a, b) => b.comments.length - a.comments.length);
-    renderThumbnails(discussionArrayElements, thumbnailsContainer);
+    const discussionElements = pictures.slice().sort((a, b) => b.comments.length - a.comments.length);
+    renderThumbnails(discussionElements, thumbnailsContainer);
     return;
   }
 
@@ -49,7 +49,7 @@ const changeFilterElementState = (evt) => {
   currentFilterElement.classList.add('img-filters__button--active');
 };
 
-const pressFilterButtons = (pictures) => {
+const activateFilterButtons = (pictures) => {
   const debouncedSortThumbnails = debounce(() => sortThumbnails(pictures), RERENDER_DELAY);
   const filterElementClickHandler = (evt) => {
     changeFilterElementState(evt, pictures);
@@ -61,4 +61,4 @@ const pressFilterButtons = (pictures) => {
   discussedFilterElement.addEventListener('click', filterElementClickHandler);
 };
 
-export { pressFilterButtons };
+export { activateFilterButtons };
